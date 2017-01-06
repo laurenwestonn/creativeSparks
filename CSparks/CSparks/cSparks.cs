@@ -10,7 +10,10 @@ namespace cSparks
     {
         //Global static var to hold all phrases
         //Accessible everywhere
-        public Phrase phrase;
+        public static Phrase phraseA = new Phrase("pigeon", null);
+        public static Phrase phraseB = new Phrase("are standing on my shoe", null);
+        public static Phrase[] arrayA = {phraseA, phraseB};
+        public static Phrase phrase = new Phrase("Hello you ", arrayA);
 
         static void Main(string[] args)
         {
@@ -20,14 +23,39 @@ namespace cSparks
             //recursive method to write one speech
             string speech = createSpeech();
 
+            printNextPhrases(phrase);
+
             Console.WriteLine(speech);
             Console.WriteLine("Press any button to close");
             Console.ReadKey();
+        }
+
+        private static void printNextPhrases(Phrase phrase)
+        {
+            if (phrase == null)
+                return;
+            if (phrase.getFollowOns() == null)
+            {
+                Console.WriteLine("There are no more phrases after this one.");
+                return;
+            }
+
+            //Print this phrase
+            Console.WriteLine(phrase.getCurrentPhrase() + "...\n");
+
+            //Print the next possible phrases
+            int count=1;
+
+            foreach (Phrase followOnPhrase in phrase.getFollowOns()) {
+                Console.WriteLine("" + count + ": " + followOnPhrase.getCurrentPhrase());
+                count++;
+            }
         }
         
         private static void populatePhrases()
 	    {
 		    //populate the global static 'phrase' as harcoded
+
 	    }
 
 	    private static string createSpeech() 
@@ -60,14 +88,34 @@ namespace cSparks
 
     class Phrase
     {
-	    string message;
+	    string currentPhrase;
 	    Phrase[] followOn;
 
-	    public Phrase(string setMessage, Phrase[] setFollowOn) 
+	    public Phrase(string setCurrentPhrase, Phrase[] setFollowOn) 
 	    {
-            message = setMessage;
+            currentPhrase = setCurrentPhrase;
             followOn = setFollowOn;
-	    }
+        }
+
+        public Phrase[] getFollowOns()
+        {
+            return followOn;
+        }
+
+        public void setFollowOn(Phrase[] arrPhrase)
+        {
+            followOn = arrPhrase;
+        }
+
+        public string getCurrentPhrase()
+        {
+            return currentPhrase;
+        }
+
+        public void setCurrentPhrase(string newPhrase)
+        {
+            currentPhrase = newPhrase;
+        }
 
 	    public Phrase getNextPhrase() 
 	    {
@@ -75,7 +123,7 @@ namespace cSparks
 
 		    int count = 1;
 		    foreach (Phrase nextPhrase in followOn) {
-			    Console.WriteLine(count + ": " + nextPhrase.message);
+			    Console.WriteLine(count + ": " + nextPhrase.currentPhrase);
 			    count++;
 		    }
 
