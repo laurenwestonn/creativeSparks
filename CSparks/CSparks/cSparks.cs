@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Engine;
 
 namespace cSparks
 {
@@ -12,7 +13,9 @@ namespace cSparks
         //Accessible everywhere
         public static Phrase phraseA = new Phrase("pigeon", null);
         public static Phrase phraseB = new Phrase("are standing on my shoe", null);
-        public static Phrase[] arrayA = {phraseA, phraseB};
+        public static List<Phrase> arrayA;
+        //arrayA.Add(phraseA);
+        //arrayA.Add(phraseB);
         public static Phrase phrase = new Phrase("Hello you ", arrayA);
 
         static void Main(string[] args)
@@ -23,7 +26,7 @@ namespace cSparks
             //recursive method to write one speech
             string speech = createSpeech();
 
-            printNextPhrases(phrase);
+            printNextPhrases(World.phraseList(0));
 
             Console.WriteLine(speech);
             Console.WriteLine("Press any button to close");
@@ -34,20 +37,20 @@ namespace cSparks
         {
             if (phrase == null)
                 return;
-            if (phrase.getFollowOns() == null)
+            if (phrase.followOn == null)
             {
                 Console.WriteLine("There are no more phrases after this one.");
                 return;
             }
 
             //Print this phrase
-            Console.WriteLine(phrase.getCurrentPhrase() + "...\n");
+            Console.WriteLine(phrase.currentPhrase + "...\n");
 
             //Print the next possible phrases
             int count=1;
 
-            foreach (Phrase followOnPhrase in phrase.getFollowOns()) {
-                Console.WriteLine("" + count + ": " + followOnPhrase.getCurrentPhrase());
+            foreach (Phrase followOnPhrase in phrase.followOn) {
+                Console.WriteLine("" + count + ": " + followOnPhrase.currentPhrase);
                 count++;
             }
         }
@@ -86,54 +89,4 @@ namespace cSparks
 
     }
 
-    class Phrase
-    {
-	    string currentPhrase;
-	    Phrase[] followOn;
-
-	    public Phrase(string setCurrentPhrase, Phrase[] setFollowOn) 
-	    {
-            currentPhrase = setCurrentPhrase;
-            followOn = setFollowOn;
-        }
-
-        public Phrase[] getFollowOns()
-        {
-            return followOn;
-        }
-
-        public void setFollowOn(Phrase[] arrPhrase)
-        {
-            followOn = arrPhrase;
-        }
-
-        public string getCurrentPhrase()
-        {
-            return currentPhrase;
-        }
-
-        public void setCurrentPhrase(string newPhrase)
-        {
-            currentPhrase = newPhrase;
-        }
-
-	    public Phrase getNextPhrase() 
-	    {
-		    Console.WriteLine("Please enter the number of the phrase you'd like next");
-
-		    int count = 1;
-		    foreach (Phrase nextPhrase in followOn) {
-			    Console.WriteLine(count + ": " + nextPhrase.currentPhrase);
-			    count++;
-		    }
-
-
-		    //prompt user for a number regarding the phrase they'd like to say
-		    int input = 1;
-		    //while input isn't numerical and isnt less than count, keep prompting
-
-		    //return the chosen phrase
-		    return this.followOn[input];
-	    }
-    }
 }
