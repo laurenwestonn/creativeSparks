@@ -1,1 +1,6 @@
 C:\SourceControl\PDT\CreativeSparks\CSparks\CSparks\bin\Debug\CSparks.exe.config
+C:\SourceControl\PDT\CreativeSparks\CSparks\CSparks\obj\Debug\CSparks.csprojResolveAssemblyReference.cache
+C:\SourceControl\PDT\CreativeSparks\CSparks\CSparks\bin\Debug\CSparks.exe
+C:\SourceControl\PDT\CreativeSparks\CSparks\CSparks\bin\Debug\CSparks.pdb
+C:\SourceControl\PDT\CreativeSparks\CSparks\CSparks\obj\Debug\CSparks.exe
+C:\SourceControl\PDT\CreativeSparks\CSparks\CSparks\obj\Debug\CSparks.pdb

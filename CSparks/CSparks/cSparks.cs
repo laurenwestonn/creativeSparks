@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSparks
+namespace cSparks
 {
     class cSparks
     {
@@ -20,34 +20,38 @@ namespace CSparks
             //recursive method to write one speech
             string speech = createSpeech();
 
-            System.Console.WriteLine("Wahey");
+            Console.WriteLine(speech);
+            Console.WriteLine("Press any button to close");
+            Console.ReadKey();
         }
         
-        void populatePhrases(); 
+        private static void populatePhrases()
 	    {
 		    //populate the global static 'phrase' as harcoded
 	    }
 
-	    string createSpeech() 
+	    private static string createSpeech() 
 	    {
 		    //get the first phrase randomly
 		    string opener = startSpeech();
 		    //
-		    addToSpeech(opener);
-		    return "Hi there"
+		    //addToSpeech(opener);
+            return "Hi there";
 	    }
 
-	    string startSpeech() 
+	    private static string startSpeech() 
 	    {
 		    int totallyARandomNumber = 1;
 		    //return phrase.followOn[totallyARandomNumber];
 
-		    return "Hi"
+            return "Hi";
 	    }
 
-	    string addToSpeech(string speech, Phrase mostRecentPhrase) {
-		    if (mostRecentPhrase == null)
-			    return speech;
+	    private static string addToSpeech(string speech, Phrase mostRecentPhrase) {
+            if (mostRecentPhrase == null)
+                return speech;
+            else
+                return "Gotta add to " + speech;
 		
 		    mostRecentPhrase.getNextPhrase();
 	    }
@@ -57,27 +61,27 @@ namespace CSparks
     class Phrase
     {
 	    string message;
-	    string[] followOn;
+	    Phrase[] followOn;
 
-	    public Phrase(string message, Phrase[] followOn) 
+	    public Phrase(string setMessage, Phrase[] setFollowOn) 
 	    {
-		    message = message;
-		    followOn = followOn;
+            message = setMessage;
+            followOn = setFollowOn;
 	    }
 
 	    public Phrase getNextPhrase() 
 	    {
-		    System.Console.WriteLine("Please enter the number of the phrase you'd like next");
+		    Console.WriteLine("Please enter the number of the phrase you'd like next");
 
 		    int count = 1;
 		    foreach (Phrase nextPhrase in followOn) {
-			    System.Console.WriteLine(count + ": " + nextPhrase.message);
+			    Console.WriteLine(count + ": " + nextPhrase.message);
 			    count++;
 		    }
 
 
 		    //prompt user for a number regarding the phrase they'd like to say
-		    input = 1;
+		    int input = 1;
 		    //while input isn't numerical and isnt less than count, keep prompting
 
 		    //return the chosen phrase
