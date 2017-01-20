@@ -20,17 +20,27 @@ namespace cSparks
 
         static void Main(string[] args)
         {
-            //have static class with one instance of a phrase
-            populatePhrases();
-
-            //recursive method to write one speech
+            //recursive method to write our your first speech
             string speech = createSpeech();
 
-            printNextPhrases(World.phraseList(0));
+            Console.Write("Here is your phrase\n" + speech);
 
-            Console.WriteLine(speech);
-            Console.WriteLine("Press any button to close");
+            Console.WriteLine("\n\nPress any button to close");
             Console.ReadKey();
+        }
+
+        private static void printCurrentPhrases(List<Phrase> listOfPhrases)
+        {
+            if (listOfPhrases == null)
+                return;
+
+            int count=1;
+
+            foreach (Phrase phrase in listOfPhrases)
+            {
+                Console.WriteLine(count + ": " + phrase.currentPhrase);
+                count++;
+            }
         }
 
         private static void printNextPhrases(Phrase phrase)
@@ -63,29 +73,70 @@ namespace cSparks
 
 	    private static string createSpeech() 
 	    {
-		    //get the first phrase randomly
-		    string opener = startSpeech();
-		    //
+            string speech;
+
+		    //choose the first phrase
+		    Phrase opener = new Phrase("Default phrase, you shouldn't see this",null);
+            startSpeech(ref opener);
+
+            //Build up the string for your speech
+            speech = opener.currentPhrase;
+
+            Console.WriteLine("\n\n" + opener.currentPhrase + "...");
+            printCurrentPhrases(opener.followOn);
+
 		    //addToSpeech(opener);
-            return "Hi there";
+
+            return speech;
 	    }
 
-	    private static string startSpeech() 
-	    {
-		    int totallyARandomNumber = 1;
-		    //return phrase.followOn[totallyARandomNumber];
+	    private static void startSpeech(ref Phrase phrase)
+        {
+            //The number you press
+            int choice=-1;
+            //You haven't yet chosen the next phrase
+            bool notChosenNextPhrase = true;
 
-            return "Hi";
+            //Ask the user to chose the next phrase from a few that are printed out. Repeat until user chooses one
+            while (notChosenNextPhrase)
+            {
+                printCurrentPhrases(World.getFirstPhraseList());
+
+                choice = isKeyPressNumeric(Console.ReadKey());
+
+                //check if you've made a valid choice, if so, exit the loop
+                if (choice > 0 & choice <= World.getFirstPhraseList().Count)
+                {
+                    notChosenNextPhrase = false; //next phrase is now chose, continue
+                }
+                else
+                    Console.WriteLine("\nChoose a numbered phrase. You chose " + choice);
+            }
+
+            phrase = World.getFirstPhraseList()[choice-1];
 	    }
 
-	    private static string addToSpeech(string speech, Phrase mostRecentPhrase) {
+        private static string addToSpeech(string speech, Phrase mostRecentPhrase)
+        {
             if (mostRecentPhrase == null)
                 return speech;
             else
                 return "Gotta add to " + speech;
-		
-		    mostRecentPhrase.getNextPhrase();
-	    }
+
+            mostRecentPhrase.getNextPhrase();
+        }
+
+        private static int isKeyPressNumeric(ConsoleKeyInfo keyPress)
+        {
+            //Returns -1 if the key is not numeric
+            int choice = -1;
+
+            //Convert to int if you pressed a number
+            if (char.IsDigit(keyPress.KeyChar))
+                choice = int.Parse(keyPress.KeyChar.ToString());
+
+            return choice;
+        }
 
     }
 

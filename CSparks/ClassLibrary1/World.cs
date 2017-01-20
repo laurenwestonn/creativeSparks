@@ -6,14 +6,19 @@ using System.Threading.Tasks;
 
 namespace Engine
 {
-    class World
+    public static class World
     {
         //populate here, access in the game cSparks
-        public static readonly List<Phrase> phraseList;
+        public static readonly List<Phrase> phraseList = new List<Phrase>();
 
         static World()
         {
             populatePhrases();
+        }
+
+        public static List<Phrase> getFirstPhraseList()
+        {
+            return phraseList;
         }
 
         private static void populatePhrases()
@@ -46,13 +51,15 @@ namespace Engine
             Phrase C = new Phrase("Howdy ", null);
 
             //Put each of the speeches into a list. This will be used in the game.
-            phraseList = new List<Phrase>{A,B,C};
+            phraseList.Add(A);
+            phraseList.Add(B);
+            phraseList.Add(C);
         }
 
 
         //Puts three strings into a list of phrases that have no follow on phrases
         //make this generic: for args.length
-        List<Phrase> makeLastPhraseList(string A, string B, string C)
+        public static List<Phrase> makeLastPhraseList(string A, string B, string C)
         {
             //Make the phrases that follow on
             Phrase pA = new Phrase(A, null);
