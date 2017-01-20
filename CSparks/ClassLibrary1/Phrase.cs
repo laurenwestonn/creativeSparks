@@ -10,11 +10,13 @@ namespace Engine
     {
         public string currentPhrase { get; set; }
         public List<Phrase> followOn { get; set; }
+        public int rating { get; set; }
 
-        public Phrase(string setCurrentPhrase, List<Phrase> setFollowOn)
+        public Phrase(string setCurrentPhrase, List<Phrase> setFollowOn, int setRating)
         {
             currentPhrase = setCurrentPhrase;
             followOn = setFollowOn;
+            rating = setRating;
         }
 
         public Phrase getNextPhrase()

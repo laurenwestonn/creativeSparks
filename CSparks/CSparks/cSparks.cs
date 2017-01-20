@@ -9,21 +9,12 @@ namespace cSparks
 {
     class cSparks
     {
-        //Global static var to hold all phrases
-        //Accessible everywhere
-        public static Phrase phraseA = new Phrase("pigeon", null);
-        public static Phrase phraseB = new Phrase("are standing on my shoe", null);
-        public static List<Phrase> arrayA;
-        //arrayA.Add(phraseA);
-        //arrayA.Add(phraseB);
-        public static Phrase phrase = new Phrase("Hello you ", arrayA);
-
         static void Main(string[] args)
         {
             //recursive method to write our your first speech
             string speech = createSpeech();
 
-            Console.Write("Here is your phrase\n" + speech);
+            Console.Write("\n\n\nThis is what you came up with\n" + speech);
 
             Console.WriteLine("\n\nPress any button to close");
             Console.ReadKey();
@@ -76,16 +67,13 @@ namespace cSparks
             string speech;
 
 		    //choose the first phrase
-		    Phrase opener = new Phrase("Default phrase, you shouldn't see this",null);
+		    Phrase opener = new Phrase("Default phrase, you shouldn't see this",null, 5);
             startSpeech(ref opener);
 
             //Build up the string for your speech
             speech = opener.currentPhrase;
 
-            Console.WriteLine("\n\n" + opener.currentPhrase + "...");
-            printCurrentPhrases(opener.followOn);
-
-		    //addToSpeech(opener);
+		    speech = addToSpeech(opener.currentPhrase, opener);
 
             return speech;
 	    }
@@ -106,11 +94,7 @@ namespace cSparks
 
                 //check if you've made a valid choice, if so, exit the loop
                 if (choice > 0 & choice <= World.getFirstPhraseList().Count)
-                {
-                    notChosenNextPhrase = false; //next phrase is now chose, continue
-                }
-                else
-                    Console.WriteLine("\nChoose a numbered phrase. You chose " + choice);
+                    notChosenNextPhrase = false; //next phrase is now chosen, continue
             }
 
             phrase = World.getFirstPhraseList()[choice-1];
@@ -118,12 +102,44 @@ namespace cSparks
 
         private static string addToSpeech(string speech, Phrase mostRecentPhrase)
         {
-            if (mostRecentPhrase == null)
+            //Base Case
+            //If there's no follow on phrases, return the speech as it is
+            if (mostRecentPhrase.followOn == null) 
                 return speech;
-            else
-                return "Gotta add to " + speech;
 
-            mostRecentPhrase.getNextPhrase();
+            //Recursive case
+            //Print out next phrase options
+
+            //The number you press
+            int choice = -1;
+            //You haven't yet chosen the next phrase
+            bool notChosenNextPhrase = true;
+
+            //Ask the user to chose the next phrase from a few that are printed out. Repeat until user chooses one
+            while (notChosenNextPhrase)
+            {
+                Console.WriteLine("\n\n" + speech + "...");
+                printCurrentPhrases(mostRecentPhrase.followOn);
+
+                choice = isKeyPressNumeric(Console.ReadKey());
+
+                //check if you've made a valid choice, if so, exit the loop
+                if (choice > 0 & choice <= mostRecentPhrase.followOn.Count)
+                    notChosenNextPhrase = false; //next phrase is now chosen, continue
+            }
+
+            //User has made a valid choice. Get append the text of the next phrase to the speech
+            speech = speech + mostRecentPhrase.followOn[choice - 1].currentPhrase;
+
+            if (mostRecentPhrase.followOn[choice - 1].rating < 5)
+            {
+                //update the rating here
+                Console.WriteLine("\n\nAre you sure you wanna say that?");
+            }
+
+            //Add any further speeches
+            return addToSpeech(speech, mostRecentPhrase.followOn[choice - 1]);
+
         }
 
         private static int isKeyPressNumeric(ConsoleKeyInfo keyPress)
