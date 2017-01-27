@@ -10,33 +10,54 @@ namespace Engine
     {
         public string currentPhrase { get; set; }
         public List<Phrase> followOn { get; set; }
-        public int rating { get; set; }
+        public int generalRating { get; set; }
+        public List<int> impresses { get; set; }
+        public List<int> offends { get; set; }
 
-        public Phrase(string setCurrentPhrase, List<Phrase> setFollowOn, int setRating)
+        public Phrase(string setCurrentPhrase, List<Phrase> setFollowOn, int setGeneralRating, List<int> setImpresses, List<int> setOffends)
         {
             currentPhrase = setCurrentPhrase;
             followOn = setFollowOn;
-            rating = setRating;
+            generalRating = setGeneralRating;
+            impresses = setImpresses;
+            offends = setOffends;
         }
 
-        public Phrase getNextPhrase()
+        public static void printCurrentPhrases(List<Phrase> listOfPhrases)
         {
-            Console.WriteLine("Please enter the number of the phrase you'd like next");
+            if (listOfPhrases == null)
+                return;
 
             int count = 1;
-            foreach (Phrase nextPhrase in followOn)
+
+            foreach (Phrase phrase in listOfPhrases)
             {
-                Console.WriteLine(count + ": " + nextPhrase.currentPhrase);
+                Console.WriteLine(count + ": " + phrase.currentPhrase);
                 count++;
             }
+        }
 
+        public static void printNextPhrases(Phrase phrase)
+        {
+            if (phrase == null)
+                return;
+            if (phrase.followOn == null)
+            {
+                Console.WriteLine("There are no more phrases after this one.");
+                return;
+            }
 
-            //prompt user for a number regarding the phrase they'd like to say
-            int input = 1;
-            //while input isn't numerical and isnt less than count, keep prompting
+            //Print this phrase
+            Console.WriteLine(phrase.currentPhrase + "...\n");
 
-            //return the chosen phrase
-            return this.followOn[input];
+            //Print the next possible phrases
+            int count = 1;
+
+            foreach (Phrase followOnPhrase in phrase.followOn)
+            {
+                Console.WriteLine("" + count + ": " + followOnPhrase.currentPhrase);
+                count++;
+            }
         }
     }
 }

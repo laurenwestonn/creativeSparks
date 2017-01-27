@@ -9,65 +9,31 @@ namespace cSparks
 {
     class cSparks
     {
+        public static Dateable yourDate {get; set;}
+
         static void Main(string[] args)
         {
-            //recursive method to write our your first speech
+            //Get a date! :D
+            yourDate = new Dateable("", null);
+            yourDate = yourDate.getADate();
+            Console.WriteLine("Woohoo got a date with " + yourDate.name);
+
+            //Say something to impress them
             string speech = createSpeech();
 
+            //What you said
             Console.Write("\n\n\nThis is what you came up with\n" + speech);
 
             Console.WriteLine("\n\nPress any button to close");
             Console.ReadKey();
         }
 
-        private static void printCurrentPhrases(List<Phrase> listOfPhrases)
-        {
-            if (listOfPhrases == null)
-                return;
-
-            int count=1;
-
-            foreach (Phrase phrase in listOfPhrases)
-            {
-                Console.WriteLine(count + ": " + phrase.currentPhrase);
-                count++;
-            }
-        }
-
-        private static void printNextPhrases(Phrase phrase)
-        {
-            if (phrase == null)
-                return;
-            if (phrase.followOn == null)
-            {
-                Console.WriteLine("There are no more phrases after this one.");
-                return;
-            }
-
-            //Print this phrase
-            Console.WriteLine(phrase.currentPhrase + "...\n");
-
-            //Print the next possible phrases
-            int count=1;
-
-            foreach (Phrase followOnPhrase in phrase.followOn) {
-                Console.WriteLine("" + count + ": " + followOnPhrase.currentPhrase);
-                count++;
-            }
-        }
-        
-        private static void populatePhrases()
-	    {
-		    //populate the global static 'phrase' as harcoded
-
-	    }
-
 	    private static string createSpeech() 
 	    {
             string speech;
 
 		    //choose the first phrase
-		    Phrase opener = new Phrase("Default phrase, you shouldn't see this",null, 5);
+		    Phrase opener = new Phrase("Default phrase, you shouldn't see this",null, -100, null, null);
             startSpeech(ref opener);
 
             //Build up the string for your speech
@@ -88,7 +54,7 @@ namespace cSparks
             //Ask the user to chose the next phrase from a few that are printed out. Repeat until user chooses one
             while (notChosenNextPhrase)
             {
-                printCurrentPhrases(World.getFirstPhraseList());
+                Phrase.printCurrentPhrases(World.getFirstPhraseList());
 
                 choice = isKeyPressNumeric(Console.ReadKey());
 
@@ -119,7 +85,7 @@ namespace cSparks
             while (notChosenNextPhrase)
             {
                 Console.WriteLine("\n\n" + speech + "...");
-                printCurrentPhrases(mostRecentPhrase.followOn);
+                Phrase.printCurrentPhrases(mostRecentPhrase.followOn);
 
                 choice = isKeyPressNumeric(Console.ReadKey());
 
@@ -131,7 +97,7 @@ namespace cSparks
             //User has made a valid choice. Get append the text of the next phrase to the speech
             speech = speech + mostRecentPhrase.followOn[choice - 1].currentPhrase;
 
-            if (mostRecentPhrase.followOn[choice - 1].rating < 5)
+            if (mostRecentPhrase.followOn[choice - 1].generalRating < 0)
             {
                 //update the rating here
                 Console.WriteLine("\n\nAre you sure you wanna say that?");
