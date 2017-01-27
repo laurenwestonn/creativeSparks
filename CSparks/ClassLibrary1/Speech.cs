@@ -8,23 +8,23 @@ namespace Engine
 {
     public class Speech
     {
-        public static string createSpeech()
+        public static string createWholeSpeech(Dateable date)
         {
             string speech;
 
             //choose the first phrase
-            Phrase opener = new Phrase("Default phrase, you shouldn't see this", null, -100, null, null);
-            startSpeech(ref opener);
+            Phrase opener = new Phrase("", null, -100, null, null);
+            startSpeech(ref opener, date);
 
             //Build up the string for your speech
             speech = opener.currentPhrase;
 
-            speech = addToSpeech(opener.currentPhrase, opener);
+            speech = addToSpeech(opener.currentPhrase, opener, date);
 
             return speech;
         }
 
-        public static void startSpeech(ref Phrase phrase)
+        public static void startSpeech(ref Phrase phrase, Dateable date)
         {
             //The number you press
             int choice = -1;
@@ -44,9 +44,11 @@ namespace Engine
             }
 
             phrase = World.getFirstPhraseList()[choice - 1];
+
+           World.amendScore(phrase, date);
         }
 
-        public static string addToSpeech(string speech, Phrase mostRecentPhrase)
+        public static string addToSpeech(string speech, Phrase mostRecentPhrase, Dateable date)
         {
             //Base Case
             //If there's no follow on phrases, return the speech as it is
@@ -83,8 +85,10 @@ namespace Engine
                 Console.WriteLine("\n\nAre you sure you wanna say that?");
             }
 
+            World.amendScore(mostRecentPhrase.followOn[choice - 1], date);
+
             //Add any further speeches
-            return addToSpeech(speech, mostRecentPhrase.followOn[choice - 1]);
+            return addToSpeech(speech, mostRecentPhrase.followOn[choice - 1], date);
 
         }
 

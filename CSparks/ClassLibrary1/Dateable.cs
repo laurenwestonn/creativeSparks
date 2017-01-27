@@ -18,7 +18,7 @@ namespace Engine
         }
 
         //Pick a random number to choose a random date
-        public Dateable getADate()
+        public Dateable pickARandomDate()
         {
             Console.WriteLine("Counting from " + (int)(World.dates.Count() - 1) ); //no length to dates
             return World.dates[new Random().Next(0, World.dates.Count()-1)];
